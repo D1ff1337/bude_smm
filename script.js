@@ -1,52 +1,7 @@
 document.documentElement.classList.add('js');
-const slides=[...document.querySelectorAll('.slide')];
-slides.forEach((s,i)=>{
-  const mk=(c,t)=>{const d=document.createElement('div');d.className=c;d.textContent=t;s.appendChild(d)};
-  mk('tl','Amina Kryvenda');mk('tr','2026');mk('bl','2026');
-  mk('br',String(i+1).padStart(3,'0')+'.');
-});
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.2});
 document.querySelectorAll('h2,.logo').forEach(el=>io.observe(el));
 
-/* акордеон «Для кого» (на телефоні) */
-const rows=[...document.querySelectorAll('.row')];
-rows.forEach(r=>{
-  r.tabIndex=0;r.setAttribute('role','button');
-  const t=()=>{const o=r.classList.contains('open');rows.forEach(x=>{x.classList.remove('open');x.setAttribute('aria-expanded','false')});if(!o){r.classList.add('open');r.setAttribute('aria-expanded','true')}};
-  r.addEventListener('click',t);
-  r.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}});
-});
-if(rows[0]){rows[0].classList.add('open');rows[0].setAttribute('aria-expanded','true')}
-
-/* кожен розділ точно вміщується в екран: за потреби масштабуємо вміст */
-const MAXW=1200;
-function fit(s){
-  const i=s.querySelector('.inner');if(!i)return;
-  ['transform','width','maxWidth','marginLeft','marginBottom','transformOrigin'].forEach(p=>i.style[p]='');
-  const cs=getComputedStyle(s);
-  const avail=s.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-  if(i.offsetHeight<=avail)return;
-  const apply=k=>{
-    i.style.maxWidth='none';
-    i.style.width=`calc(min(100%,${MAXW}px)/${k})`;
-    i.style.marginLeft=`calc((100% - min(100%,${MAXW}px))/2)`;
-    i.style.transformOrigin='top left';
-    i.style.transform=`scale(${k})`;
-    return i.offsetHeight*k;
-  };
-  let lo=.4,hi=1,best=lo;
-  for(let n=0;n<10;n++){const m=(lo+hi)/2;if(apply(m)<=avail){best=m;lo=m}else hi=m}
-  apply(best);
-  i.style.marginBottom=`${-(i.offsetHeight*(1-best))}px`;
-}
-const fitAll=()=>slides.forEach(fit);
-let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(fitAll,120)});
-addEventListener('orientationchange',()=>setTimeout(fitAll,250));
-addEventListener('load',fitAll);
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);
-fitAll();
-
-/* мобільна кнопка: з’являється, коли перший екран пішов */
 const st=document.getElementById('sticky'),hero=document.querySelector('.hero');
 if(st&&hero)new IntersectionObserver(([e])=>st.classList.toggle('show',e.intersectionRatio<.6),{threshold:[0,.6,1]}).observe(hero);
 
@@ -95,3 +50,13 @@ fd.forEach(d=>d.addEventListener('toggle',()=>{if(d.open)fd.forEach(o=>{if(o!==d
 // ===== Ховаємо плаваючу кнопку на фінальному екрані =====
 const fin=document.getElementById('final');
 if(fin&&st)new IntersectionObserver(([e])=>st.classList.toggle('hide',e.isIntersecting),{threshold:.3}).observe(fin);
+
+// ===== Бургер-меню (телефон) =====
+const nav=document.getElementById('nav'),burger=document.querySelector('.burger');
+function setMenu(o){nav.classList.toggle('open',o);burger.setAttribute('aria-expanded',String(o));document.body.classList.toggle('menu-open',o)}
+if(nav&&burger){
+  burger.addEventListener('click',()=>setMenu(!nav.classList.contains('open')));
+  document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+  addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+  matchMedia('(min-width:821px)').addEventListener('change',e=>{if(e.matches)setMenu(false)});
+}
