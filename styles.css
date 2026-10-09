@@ -493,3 +493,6 @@ a,button,summary,.tb{cursor:pointer;touch-action:manipulation}
   border-bottom:1px solid rgba(251,246,242,.3);
  }
 }
+
+.sticky{align-items:center;padding-top:.15rem;padding-bottom:0;line-height:1}
+.sticky span{line-height:1;transform:none}
