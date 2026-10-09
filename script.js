@@ -33,15 +33,15 @@ function show(i,scroll){
   cur=i;
   [...tabs.children].forEach((b,k)=>b.setAttribute('aria-selected',k===i));
   const [t,l,by]=M[i];
-  mod.innerHTML='<div class="pn"><button data-d="-1" aria-label="Попередній модуль">←</button><button data-d="1" aria-label="Наступний модуль">→</button></div><div class="mn">Модуль '+i+'</div><h3>'+t+'</h3>'+(by?'<span class="by">з експертом: '+by+'</span>':'')+'<ul>'+l.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  mod.innerHTML='<div class="pn"><button data-d="-1" aria-label="Попередній модуль" title="Попередній модуль">←</button><button data-d="1" aria-label="Наступний модуль" title="Наступний модуль">→</button></div><div class="mn">Модуль '+i+' з '+(M.length-1)+'</div><h3>'+t+'</h3>'+(by?'<span class="by">з експертом: '+by+'</span>':'')+'<ul>'+l.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
   
 }
-M.forEach((m,i)=>{const b=document.createElement('button');b.className='tb';b.setAttribute('role','tab');b.innerHTML='<i>'+String(i).padStart(2,'0')+'</i><em>'+m[0]+'</em>';b.setAttribute('aria-label','Модуль '+i+': '+m[0]);b.onclick=()=>show(i);tabs.appendChild(b)});
+M.forEach((m,i)=>{const b=document.createElement('button');b.className='tb';b.setAttribute('role','tab');b.innerHTML='<i>'+String(i).padStart(2,'0')+'</i><em>'+m[0]+'</em>';b.setAttribute('aria-label','Модуль '+i+': '+m[0]);b.onclick=()=>{show(i);if(matchMedia('(max-width:820px)').matches)mod.scrollIntoView({block:'nearest',behavior:'smooth'})};tabs.appendChild(b)});
 mod.onclick=e=>{const d=e.target.closest('[data-d]');if(d)show((cur+ +d.dataset.d+M.length)%M.length,true)};
 show(0);
 
 // ===== Результати учнів (15 заглушок: фото + сума) =====
-document.getElementById('cases').innerHTML=Array.from({length:15},()=>'<div class="c"><div>фото</div><span>00 000 грн</span></div>').join('');
+document.getElementById('cases').innerHTML=Array.from({length:15},()=>'<div class="case"><div>фото</div><span>00 000 грн</span></div>').join('');
 
 // ===== FAQ: відкрито лише одне питання =====
 const fd=[...document.querySelectorAll('.faq details')];
@@ -59,4 +59,24 @@ if(nav&&burger){
   document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
   addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
   matchMedia('(min-width:821px)').addEventListener('change',e=>{if(e.matches)setMenu(false)});
+}
+
+
+// ===== Клавіатура для модулів: стрілки перемикають вкладки =====
+tabs.addEventListener('keydown',e=>{
+  const k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];
+  if(!k)return;e.preventDefault();
+  const n=(cur+k+M.length)%M.length;show(n);tabs.children[n].focus();
+});
+
+// ===== Підсвітка поточного розділу в меню =====
+const spy=[...document.querySelectorAll('#menu a[href^="#"]')].filter(a=>a.getAttribute('href').length>1&&document.querySelector(a.getAttribute('href')));
+if(spy.length){
+  const vis=new Map();
+  const so=new IntersectionObserver(es=>{
+    es.forEach(e=>vis.set(e.target,e.isIntersecting?e.intersectionRatio:0));
+    let best=null,r=0;vis.forEach((v,t)=>{if(v>r){r=v;best=t}});
+    spy.forEach(a=>{const on=best&&best===document.querySelector(a.getAttribute('href'));on?a.setAttribute('aria-current','true'):a.removeAttribute('aria-current')});
+  },{threshold:[0,.25,.5,.75,1],rootMargin:'-20% 0px -40% 0px'});
+  spy.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));vis.set(t,0);so.observe(t)});
 }
