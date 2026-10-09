@@ -431,3 +431,65 @@ a,button,summary,.tb{cursor:pointer;touch-action:manipulation}
 
 /* позначка «лише 5 місць»: над заголовком, прямокутна мітка (не кнопка) */
 .t.i .tag{position:static;order:-1;align-self:flex-start;background:var(--pink);color:#12335a;padding:.25rem .7rem;border-radius:.4rem;font:600 .8rem 'Inter Tight',sans-serif;font-style:normal;margin-bottom:-.2rem}
+
+
+/* ===== ПРАВКИ ПО СКРІНШОТАХ ===== */
+/* цифри у вступі — більші */
+.facts3 b{font-size:4.4rem;white-space:nowrap}
+.facts3 span{font-size:.95rem}
+/* кнопка-«таблетка» знизу: текст і дата на одній лінії */
+.sticky{align-items:baseline;padding-top:1.05rem;padding-bottom:1.05rem}
+.sticky span{line-height:1}
+.chips{margin-top:.5rem}
+
+@media (max-width:820px){
+ /* цифри */
+ .facts3 b{font-size:min(12vw,3.8rem)}
+ .facts3 span{font-size:.8rem}
+ .facts3>div{padding:1rem .2rem 1rem .8rem}
+ .facts3>div:first-child{padding-left:0}
+
+ /* «Що матимеш після навчання» + «Матеріали»: рівні колонки, лінії між усіма рядками */
+ .nums li,.nums.l li{border-left:0;padding:.95rem .9rem .95rem 0;border-bottom:1px solid var(--line)}
+ .nums li:nth-child(even),.nums.l li:nth-child(even){border-left:1px solid var(--line);padding-left:.9rem;padding-right:0}
+ .nums.l li,.nums.l li:nth-child(even){border-color:rgba(251,246,242,.3)}
+ .nums li:nth-last-child(-n+3),.nums.l li:nth-last-child(-n+3){border-bottom:1px solid var(--line)}
+ .nums.l li:nth-last-child(-n+3){border-bottom-color:rgba(251,246,242,.3)}
+ /* останній непарний пункт — на всю ширину, без лінії знизу */
+ .nums li:last-child:nth-child(odd),.nums.l li:last-child:nth-child(odd){grid-column:1/-1;border-bottom:0;padding-right:0}
+ /* «Для чого безкоштовна стратегія» — без змін */
+ .nums.l1 li,.nums.l1 li:nth-child(even){border-left:0;padding-left:0;padding-right:0}
+
+ /* FAQ: без великого проміжку між двома половинами, питання крупніші й однакової висоти */
+ .faq{gap:0}
+ .faq summary{font-size:1.1rem;min-height:4.2rem;display:flex;align-items:center;padding-top:.8rem;padding-bottom:.8rem}
+ .faq>div:last-child>details:first-child{border-top:0}
+
+ /* заголовок «Додатково» */
+ .bg-dusty h2.c{margin-bottom:1.4rem}
+}
+.facts3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+
+@media (max-width:820px){
+ .nums.l li:last-child:nth-child(odd){
+  grid-column:auto;
+  padding-right:.9rem;
+  border-right:0;
+  border-bottom:1px solid rgba(251,246,242,.3);
+ }
+ .nums.l::after{
+  content:"";
+  border-left:1px solid rgba(251,246,242,.3);
+  border-bottom:1px solid rgba(251,246,242,.3);
+ }
+}
+
+@media (min-width:821px){
+ .nums.l li:nth-last-child(-n+2){border-bottom:1px solid rgba(251,246,242,.3)}
+ .nums.l::after{
+  content:"";
+  border-left:1px solid rgba(251,246,242,.3);
+  border-bottom:1px solid rgba(251,246,242,.3);
+ }
+}
