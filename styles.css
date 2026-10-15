@@ -277,11 +277,13 @@ h2.sm{font-size:3.2rem}
 
 /* логотип ще менший і вище */
 .word{justify-content:flex-start;padding-top:1.2rem}
+.word{align-items:flex-end;padding-right:var(--pad)}
 .w1{font-size:min(7vw,8vh)}
+.w1{transform:none}
 .w2{font-size:min(12vw,14vh)}
 @media (max-width:820px){
  .word{padding-top:.8rem}
- .w1{font-size:min(20vw,11svh)}.w2{font-size:min(30vw,16svh)}
+ .w1{font-size:min(10vw,5.5svh)}.w2{font-size:min(15vw,8svh)}
 }
 
 /* ===== БУРГЕР-МЕНЮ + доопрацювання під телефон ===== */
@@ -320,14 +322,14 @@ img{max-width:100%}
 .icards .sp{display:block;color:var(--acc);font-size:1.3rem;margin-bottom:.6rem}
 .intro-r{position:relative;height:30rem}
 .intro-r .pol{position:absolute;width:12.5rem}
-.q1{left:0;top:1rem;transform:rotate(-6deg)}.q2{right:0;top:6rem;transform:rotate(5deg);z-index:2}.q3{left:16%;bottom:0;transform:rotate(-2deg);z-index:3}
+.q1{left:0;top:1rem;transform:rotate(-6deg)}.q2{right:0;top:6rem;transform:rotate(5deg);z-index:2}.q3{left:16%;bottom:0;transform:rotate(-2deg);z-index:3}.q4{right:8%;bottom:1rem;transform:rotate(7deg);z-index:1;width:9rem}
 .intro-r .sp{position:absolute;color:var(--acc)}.s1{right:6%;top:0;font-size:2.2rem}.s2{left:2%;bottom:30%;font-size:1.5rem}
 @media (max-width:820px){
  .intro .wrap{grid-template-columns:1fr;gap:1.6rem}
  .intro p.big{font-size:1.7rem;margin-bottom:1.2rem}
  .facts3 b{font-size:2.2rem}.facts3 span{font-size:.72rem}.facts3>div{padding:.8rem .7rem}
  .icards{grid-template-columns:1fr;gap:.7rem}.icards p{font-size:.9rem;padding:1rem}
- .intro-r{height:15rem}.intro-r .pol{width:8rem}.q2{top:2.5rem}.q3{left:24%}
+ .intro-r{height:15rem}.intro-r .pol{width:8rem}.q2{top:2.5rem}.q3{left:24%}.q4{width:5.5rem;right:-1%;bottom:-2rem;z-index:0}
 }
 
 
@@ -496,3 +498,44 @@ a,button,summary,.tb{cursor:pointer;touch-action:manipulation}
 
 .sticky{align-items:center;padding-top:.15rem;padding-bottom:0;line-height:1}
 .sticky span{line-height:1;transform:none}
+/* ===== правки переносів тексту (мобільна + десктоп) ===== */
+
+/* 700+/3/7: слово-на-рядок лише на вузьких екранах, щоб підписи не рвались як 2+1 */
+.mw{display:none}
+@media (max-width:820px){
+ .mw{display:inline}
+}
+
+/* бейдж «з експертом: …» у модулях — центруємо текст, щоб 2-рядковий варіант
+   виглядав як акуратна пігулка, а не зсунутий вліво прямокутник */
+.by{text-align:center}
+
+/* блок з розтермінуванням у тарифах: розділили на два речення —
+   додаємо відступ між ними, крапка більше не висить в кінці короткого рядка */
+.tf-text{display:flex;flex-direction:column;gap:.5rem}
+.tf-note{margin:0}
+
+/* безкоштовна стратегія: кнопку перенесли під список пунктів
+   (замість того, щоб розривати фразу «...допоможе визначити:» і сам список) */
+.strategy-r{display:flex;flex-direction:column;gap:1.4rem}
+.strategy-r .btn{align-self:flex-start}
+@media (max-width:820px){
+ .strategy-r .btn{align-self:stretch}
+}
+.nobr{white-space:nowrap}
+
+/* ===== додаткові фото курсу (матеріали + апгрейд) ===== */
+.mat-wrap{display:grid;grid-template-columns:1fr auto;gap:2.5rem;align-items:center}
+.mat-pol{width:11rem;transform:rotate(5deg);justify-self:center}
+.up-pol{width:9rem;transform:rotate(-4deg);margin-bottom:1.3rem}
+
+@media (max-width:820px){
+ .mat-wrap{grid-template-columns:1fr;gap:1.6rem}
+ .mat-pol{justify-self:start;width:8rem}
+ .up-pol{width:7.5rem}
+}
+
+/* ===== хіро-фото: на десктопі ширша версія кадру, щоб обличчя не було занадто крупним ===== */
+@media (min-width:821px){
+ .hero-bg img{content:url('img/amina2-wide.jpg');object-position:50% 15%}
+}
