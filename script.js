@@ -1,82 +1,35 @@
 document.documentElement.classList.add('js');
-const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.2});
-document.querySelectorAll('h2,.logo').forEach(el=>io.observe(el));
 
-const st=document.getElementById('sticky'),hero=document.querySelector('.hero');
-if(st&&hero)new IntersectionObserver(([e])=>st.classList.toggle('show',e.intersectionRatio<.6),{threshold:[0,.6,1]}).observe(hero);
+// ===== Поява блоків при скролі =====
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('h2,.facts3,.grid2 article,.note,.cd,.bub,.rows li,.wcard,.pill-t,.dcard,.tc,.f3,.case').forEach(el=>{el.classList.add('rv');io.observe(el)});
 
-// ===== Програма курсу: перемикач модулів =====
-const M=[
-["Початок",["Організація та система навчання","Мислення, рішення й дії, які приводять до результату","Ефективна постановка цілей"]],
-["Робота зі страхами",["Страх почати працювати","Страх шукати клієнтів і продавати послуги","Робота з установками","Додаткова Zoom-лекція з психологом"],"психологиня Катерина Сарданова"],
-["Складові SMM",["SMM на сучасному ринку","З чого складається робота SMM-спеціаліста","Різні типи просування бізнесу й бренду","Основи маркетингу та роль стратегії","Різновиди ніш у SMM"]],
-["Основи маркетингу",["Визначення цілей бізнесу","Аналіз ринку та ніші","Аналіз конкурентів","Аналіз і сегментація цільової аудиторії","Потреби, болі, заперечення та мотивація клієнтів","Формування позиціонування"]],
-["Побудова упаковки",["Формування упаковки профілю","Візуальна концепція","Позиціонування та ключові повідомлення","Побудова контентної частини маркетингу"]],
-["Контент-стратегія",["Рубрикатор контенту","SMM-стратегія та її структура","Побудова легкої стратегії за 8 кроків","Побудова контент-плану","Воронки продажів і способи їх використання","Зв’язок між контентом і задачами бізнесу"]],
-["Стратегія просування",["Методи та канали просування","Побудова стратегії просування","Співпраця з блогерами","UGC-маркетинг","Конкурсні механіки","Органічне та платне просування"]],
-["Створення контенту",["Налаштування камери, техніка мобільної зйомки","Світло, реквізит і фони","Організація контент-зйомки","Монтаж відео / Обробка фото","Корисні застосунки для роботи з контентом"],"Анна Лащенко"],
-["Копірайтинг і stories",["Де знаходити ідеї для контенту","Копірайтинг у SMM","Тексти під різні задачі","Алгоритми та формати stories","Побудова сторітелінгу","Сенси, оформлення та корисні застосунки"]],
-["Дизайн у Figma",["Основи роботи у Figma","Створення дизайну для соцмереж","Робота з плагінами","Огляд матеріалів та інструментів для дизайну"],"Анастасія Галич"],
-["Таргетована реклама",["Роль таргету в загальній стратегії просування","Підготовка проєкту до запуску реклами","Створення рекламних креативів і оферів","Вибір аудиторій на основі проведеного аналізу","Аналіз рекламних показників та оптимізація кампаній"],"Кирил Благоверов"],
-["Аналітика та звітність",["Показники, які потрібно відстежувати","Як аналізувати контент і просування","Звіт як стратегічний інструмент","Як презентувати результати клієнту","Як використовувати звітність для продовження співпраці"]],
-["TikTok",["Успішний старт у TikTok","Алгоритми платформи","Контент-стратегія","Формати відео","Лідогенерація через TikTok","Окремий Zoom-розбір і брейншторм"],"Вікторія Колесник та Ілля Косенко"],
-["Упаковка власного профілю",["Упаковка профілю SMM-спеціаліста","Експертний та особистий контент","Стимулювання заявок через Instagram","Додаткова Zoom-лекція про особистий бренд"]],
-["Пошук клієнтів і продажі",["Формування товарної лінійки","Пакети послуг і ціноутворення","Упаковка портфоліо","Види консультацій","Пошук клієнтів онлайн та офлайн","Система продажів та проведення зідзвонів / переговорів","Робота із запереченнями","Практикум із продажів"]],
-["Закордонний ринок і масштабування",["Особливості роботи на закордонному ринку","Конкуренція та ціноутворення","Канали й способи пошуку клієнтів"],"Ксенія Кузина"],
-["Організація робочих процесів",["Тайм-менеджмент","Пошук і підбір помічника","Набір команди","Перехід від спеціаліста до власника команди або агенції","Створення власних продуктів: гайдів, чеклістів, консультацій і курсів"]],
-["ШІ та комунікація з клієнтами",["ChatGPT як робочий інструмент","Промпти для контенту, текстів та ідей","Використання нейромереж для аналітики й організації роботи","Комунікація з клієнтом на різних етапах співпраці","Робота з правками та складними ситуаціями"]],
-["Відкриття ФОП",["Коли потрібно відкривати ФОП","Реєстрація та вибір форми роботи","Оподаткування","Базові організаційні питання легальної роботи"],"Юлія Корнічук"]
-];
-const tabs=document.getElementById('tabs'),mod=document.getElementById('mod');
-let cur=0;
-function show(i,scroll){
-  cur=i;
-  [...tabs.children].forEach((b,k)=>b.setAttribute('aria-selected',k===i));
-  const [t,l,by]=M[i];
-  mod.innerHTML='<div class="pn"><button data-d="-1" aria-label="Попередній модуль" title="Попередній модуль">←</button><button data-d="1" aria-label="Наступний модуль" title="Наступний модуль">→</button></div><div class="mn">Модуль '+i+' з '+(M.length-1)+'</div><h3>'+t+'</h3>'+(by?'<span class="by">з експертом: '+by+'</span>':'')+'<ul>'+l.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
-  
-}
-M.forEach((m,i)=>{const b=document.createElement('button');b.className='tb';b.setAttribute('role','tab');b.innerHTML='<i>'+String(i).padStart(2,'0')+'</i><em>'+m[0]+'</em>';b.setAttribute('aria-label','Модуль '+i+': '+m[0]);b.onclick=()=>{show(i);if(matchMedia('(max-width:820px)').matches)mod.scrollIntoView({block:'nearest',behavior:'smooth'})};tabs.appendChild(b)});
-mod.onclick=e=>{const d=e.target.closest('[data-d]');if(d)show((cur+ +d.dataset.d+M.length)%M.length,true)};
-show(0);
+// ===== Фіксована кнопка: з’являється після першого екрана, ховається на фіналі =====
+const st=document.getElementById('sticky'),hero=document.querySelector('.hero'),fin=document.getElementById('final');
+if(st&&hero)new IntersectionObserver(([e])=>st.classList.toggle('show',e.intersectionRatio<.5),{threshold:[0,.5,1]}).observe(hero);
+if(st&&fin)new IntersectionObserver(([e])=>st.classList.toggle('hide',e.isIntersecting),{threshold:.25}).observe(fin);
 
 // ===== Результати учнів (15 заглушок: фото + сума) =====
 document.getElementById('cases').innerHTML=Array.from({length:15},()=>'<div class="case"><div>фото</div><span>00 000 грн</span></div>').join('');
 
-// ===== FAQ: відкрито лише одне питання =====
-const fd=[...document.querySelectorAll('.faq details')];
-fd.forEach(d=>d.addEventListener('toggle',()=>{if(d.open)fd.forEach(o=>{if(o!==d)o.open=false})}));
-
-// ===== Ховаємо плаваючу кнопку на фінальному екрані =====
-const fin=document.getElementById('final');
-if(fin&&st)new IntersectionObserver(([e])=>st.classList.toggle('hide',e.isIntersecting),{threshold:.3}).observe(fin);
-
-// ===== Бургер-меню (телефон) =====
-const nav=document.getElementById('nav'),burger=document.querySelector('.burger');
-function setMenu(o){nav.classList.toggle('open',o);burger.setAttribute('aria-expanded',String(o));document.body.classList.toggle('menu-open',o)}
-if(nav&&burger){
-  burger.addEventListener('click',()=>setMenu(!nav.classList.contains('open')));
-  document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
-  addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
-  matchMedia('(min-width:821px)').addEventListener('change',e=>{if(e.matches)setMenu(false)});
-}
-
-
-// ===== Клавіатура для модулів: стрілки перемикають вкладки =====
-tabs.addEventListener('keydown',e=>{
-  const k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];
-  if(!k)return;e.preventDefault();
-  const n=(cur+k+M.length)%M.length;show(n);tabs.children[n].focus();
+// ===== Акордеони: відкрито лише один пункт =====
+['.prog','.faq'].forEach(sel=>{
+  const ds=[...document.querySelectorAll(sel+' details')];
+  ds.forEach(d=>d.addEventListener('toggle',()=>{if(d.open)ds.forEach(o=>{if(o!==d)o.open=false})}));
 });
 
-// ===== Підсвітка поточного розділу в меню =====
-const spy=[...document.querySelectorAll('#menu a[href^="#"]')].filter(a=>a.getAttribute('href').length>1&&document.querySelector(a.getAttribute('href')));
-if(spy.length){
-  const vis=new Map();
-  const so=new IntersectionObserver(es=>{
-    es.forEach(e=>vis.set(e.target,e.isIntersecting?e.intersectionRatio:0));
-    let best=null,r=0;vis.forEach((v,t)=>{if(v>r){r=v;best=t}});
-    spy.forEach(a=>{const on=best&&best===document.querySelector(a.getAttribute('href'));on?a.setAttribute('aria-current','true'):a.removeAttribute('aria-current')});
-  },{threshold:[0,.25,.5,.75,1],rootMargin:'-20% 0px -40% 0px'});
-  spy.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));vis.set(t,0);so.observe(t)});
-}
+// ===== Кейси: стрілки, перетягування мишкою, горизонтальне колесо =====
+(function(){
+  const cs=document.getElementById('cases'),pv=document.getElementById('csPrev'),nx=document.getElementById('csNext');
+  if(!cs)return;
+  const step=()=>Math.max(200,cs.clientWidth*.8);
+  const upd=()=>{if(pv)pv.disabled=cs.scrollLeft<4;if(nx)nx.disabled=cs.scrollLeft>cs.scrollWidth-cs.clientWidth-4};
+  pv&&pv.addEventListener('click',()=>cs.scrollBy({left:-step(),behavior:'smooth'}));
+  nx&&nx.addEventListener('click',()=>cs.scrollBy({left:step(),behavior:'smooth'}));
+  cs.addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+  let down=false,sx=0,sl=0,moved=false;
+  cs.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;down=true;moved=false;sx=e.clientX;sl=cs.scrollLeft});
+  addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>4){moved=true;cs.classList.add('drag')}cs.scrollLeft=sl-dx});
+  addEventListener('pointerup',()=>{down=false;cs.classList.remove('drag')});
+  cs.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY))return;if(!e.shiftKey)return;e.preventDefault();cs.scrollLeft+=e.deltaY},{passive:false});
+})();
