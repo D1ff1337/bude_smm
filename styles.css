@@ -156,6 +156,13 @@ b{font-weight:700}
 .extra{margin-top:3.2rem}
 .extra h2.big{font-size:clamp(36px,10.4vw,50px);margin-bottom:1.4rem}
 
+/* ===== спікери (картки з фото) ===== */
+.spk-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem .7rem;margin-bottom:.4rem}
+.spk-ph{position:relative;aspect-ratio:3/4;background:var(--lil2);overflow:hidden;margin-bottom:.7rem}
+.spk-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.spk h3{font-size:.95rem;letter-spacing:-.025em;margin-bottom:.25rem}
+.spk p{font-size:.82rem;line-height:1.28;color:rgba(255,255,255,.7)}
+
 /* ===== акордеон ===== */
 .acc{border-top:1px solid rgba(38,38,46,.28)}
 .acc details{border-bottom:1px solid rgba(38,38,46,.28)}
@@ -206,8 +213,7 @@ b{font-weight:700}
 .case{-webkit-user-drag:none}
 .case div{pointer-events:none}
 .case{flex:none;width:9.6rem;scroll-snap-align:start}
-.case div{aspect-ratio:3/4;background:var(--gry);display:grid;place-items:center;color:var(--mute);font-size:.8rem}
-.case span{display:block;margin-top:.45rem;font:800 1rem var(--f);letter-spacing:-.03em}
+.case div{aspect-ratio:3/4;background:var(--gry)}
 
 /* ===== темна картка (апгрейд/стратегія) ===== */
 .up-s{padding-top:9rem}
@@ -428,4 +434,10 @@ b{font-weight:700}
   .panel{grid-template-columns:1fr}
   #lucky .panel{grid-template-columns:1fr}
   .bubbles{columns:3}
+}
+
+@media (min-width:900px){
+  .spk-grid{grid-template-columns:repeat(4,1fr);gap:2.2rem 1.2rem}
+  .spk h3{font-size:1.1rem}
+  .spk p{font-size:.95rem}
 }
